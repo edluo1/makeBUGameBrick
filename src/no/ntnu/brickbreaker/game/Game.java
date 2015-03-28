@@ -92,11 +92,11 @@ public class Game extends BaseGameActivity implements IOnSceneTouchListener, Obs
 		
 		paddle = new Paddle(CAMERA_WIDTH/2, CAMERA_HEIGHT-50, CAMERA_HEIGHT/8, CAMERA_WIDTH/34);
 
-		final Brick[][] bricks = new Brick[5][5];
+		final Brick[][] bricks = new Brick[8][10];
 
 		for (int i = 0; i < bricks.length; i++) {
 			for (int j = 0; j < bricks[0].length; j++) {
-				bricks[i][j]= new Brick(10+j*CAMERA_WIDTH/5, 10+i*CAMERA_HEIGHT/15 , CAMERA_HEIGHT/16, CAMERA_WIDTH/32);
+				bricks[i][j]= new Brick(10+j*(CAMERA_HEIGHT/16+2), 10+i*(CAMERA_WIDTH/32+1) , CAMERA_HEIGHT/16, CAMERA_WIDTH/32);
 				scene.getTopLayer().addEntity(bricks[i][j]);
 			}
 		}
@@ -122,9 +122,10 @@ public class Game extends BaseGameActivity implements IOnSceneTouchListener, Obs
 							for (int j = 0; j < bricks[0].length; j++) {
 								scene.setBackground(new ColorBackground(0f, 0f, 0f));
 								if(ball.collidesWith(bricks[i][j])) {
+									ball.bounceWithRectangle(bricks[i][j]);
 									bricks[i][j].setPosition(CAMERA_HEIGHT+20, CAMERA_WIDTH+20);
 									scene.getTopLayer().removeEntity(bricks[i][j]);
-									ball.bounceWithRectangle(bricks[i][j]);
+									
 									
 								}
 							}
