@@ -12,8 +12,9 @@ import org.anddev.andengine.util.constants.TimeConstants;
 public class Ball extends AnimatedSprite {
 	final float baseVelocity = 200;
 	float velocity = 200;
-	float velocityX;
-	float velocityY;
+	
+	public boolean scoring;
+
 	int i =0;
 	private Engine mEngine;
 	
@@ -70,9 +71,11 @@ public class Ball extends AnimatedSprite {
 		float paddleRight = paddleLeft + paddle.getWidth();
 		
 		this.setVelocityX(2*(ballPositionX-centerPaddle));
-		
-		this.setVelocityY(-1*this.getVelocityY());
-		
+		if (paddle.Player_Num == 1) {
+			this.setVelocityY(-1*Math.abs(this.getVelocityY()));
+		} else {
+			this.setVelocityY(Math.abs(this.getVelocityY()));
+		}
 	}
 	
 }
