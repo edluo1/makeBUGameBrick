@@ -10,7 +10,10 @@ import org.anddev.andengine.util.constants.TimeConstants;
 
 
 public class Ball extends AnimatedSprite {
-	float velocity = 100;
+	final float baseVelocity = 200;
+	float velocity = 200;
+	float velocityX;
+	float velocityY;
 	int i =0;
 	private Engine mEngine;
 	
@@ -22,9 +25,9 @@ public class Ball extends AnimatedSprite {
 	
 	protected void onManagedUpdate(final float pSecondsElapsed) {
 		if(this.mX < 0) {
-			this.setVelocityX(velocity);
+			this.setVelocityX(-1*this.getVelocityX());
 		} else if(this.mX + this.getWidth() > Game.getCAMERA_WIDTH()) {
-			this.setVelocityX(-velocity);
+			this.setVelocityX(-1*this.getVelocityX());
 		}
 
 		if(this.mY < 0) {
@@ -36,22 +39,36 @@ public class Ball extends AnimatedSprite {
 		super.onManagedUpdate(pSecondsElapsed);
 	}
 	
-	public void bounceWithRectangle(Rectangle rectangle){
-//		float ballPositionX = this.getX();
-//		float ballPositionY = this.getY();
-//		float centerVertical = rectangle.getX();
-//		float westWall = rectangle.getX() - rectangle.getWidth()/2 - this.getWidth()/2;
-//		float eastWall = rectangle.getX() + rectangle.getWidth()/2 + this.getWidth()/2;
-//		float centerHorozontal = rectangle.getY();
-//		float northWall = rectangle.getY() - rectangle.getHeight()/2 - this.getHeight()/2;
-//		float southWall = rectangle.getY() + rectangle.getHeight()/2 + this.getHeight()/2;
-//		
-//		if(ballPositionX >= westWall || ballPositionX <= eastWall) {
-//			this.setVelocityX(-this.getVelocityX());
-//		} 
-//		else {
-			this.setVelocityY(-this.getVelocityY());
-//		}
+	public void bounceWithBrick(Brick brick){
+    	float ballPositionX = this.getX();
+		float ballPositionY = this.getY();
+		float centerVertical = brick.getX();
+		float westWall = centerVertical - brick.getWidth()/2-this.getWidth();
+		float eastWall = centerVertical + brick.getWidth()/2+this.getWidth();
+		float centerHorizontal = brick.getY();
+		float northWall = centerHorizontal - brick.getHeight()/2;
+		float southWall = centerHorizontal + brick.getHeight()/2;
+		
+		if (ballPositionY >= southWall || ballPositionY <= northWall) { // hit brick from vertical
+			this.setVelocityY(-1*this.getVelocityY());
+		}
+		
+		if (ballPositionX <= westWall || ballPositionX >= eastWall) { // hit brick moving horizontal
+			this.setVelocityX(-1*this.getVelocityX());
+		} 
+
 	}
 
+	public void bounceWithPaddle(Paddle paddle) {
+		float ballPositionX = this.getX();
+		float centerPaddle = paddle.getX();
+		float paddleLeft = centerPaddle - paddle.getWidth()/2;
+		float paddleRight = centerPaddle + paddle.getWidth()/2;
+		
+		this.setVelocityX(ballPositionX-centerPaddle);
+		
+		this.setVelocityY(-1*Math.abs(this.getVelocityY()));
+		
+	}
+	
 }
