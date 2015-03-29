@@ -17,9 +17,14 @@ public class Ball extends AnimatedSprite {
 	int i =0;
 	private Engine mEngine;
 	
-	public Ball(float positionX, float positionY, TiledTextureRegion positionTextureRegion, Engine mEngine) {
+	public Ball(float positionX, float positionY, TiledTextureRegion positionTextureRegion, Engine mEngine, int Color) {
 		super(positionX, positionY, positionTextureRegion);
 		this.mEngine = mEngine;
+		if (Color == 1) {
+			this.setColor(0.5f, 0.5f, 1f);
+		} else {
+			this.setColor(1f, 0f, 0f);
+		}
 	}
 
 	
@@ -42,18 +47,17 @@ public class Ball extends AnimatedSprite {
 	public void bounceWithBrick(Brick brick){
     	float ballPositionX = this.getX();
 		float ballPositionY = this.getY();
-		float centerVertical = brick.getX();
-		float westWall = centerVertical - brick.getWidth()/2-this.getWidth();
-		float eastWall = centerVertical + brick.getWidth()/2+this.getWidth();
-		float centerHorizontal = brick.getY();
-		float northWall = centerHorizontal - brick.getHeight()/2;
-		float southWall = centerHorizontal + brick.getHeight()/2;
+		float westWall = brick.getX();
+		float eastWall = westWall + brick.getWidth();
+		float northWall = brick.getY();
+		float centerHorizontal = northWall - brick.getHeight()/2;
+		float southWall = northWall - brick.getHeight();
 		
 		if (ballPositionY >= southWall || ballPositionY <= northWall) { // hit brick from vertical
 			this.setVelocityY(-1*this.getVelocityY());
 		}
 		
-		if (ballPositionX <= westWall || ballPositionX >= eastWall) { // hit brick moving horizontal
+		else if (ballPositionX <= westWall || ballPositionX >= eastWall) { // hit brick moving horizontal
 			this.setVelocityX(-1*this.getVelocityX());
 		} 
 
@@ -61,13 +65,13 @@ public class Ball extends AnimatedSprite {
 
 	public void bounceWithPaddle(Paddle paddle) {
 		float ballPositionX = this.getX();
-		float centerPaddle = paddle.getX();
-		float paddleLeft = centerPaddle - paddle.getWidth()/2;
-		float paddleRight = centerPaddle + paddle.getWidth()/2;
+		float paddleLeft = paddle.getX();
+		float centerPaddle = paddleLeft + paddle.getWidth()/2;
+		float paddleRight = paddleLeft + paddle.getWidth();
 		
-		this.setVelocityX(ballPositionX-centerPaddle);
+		this.setVelocityX(2*(ballPositionX-centerPaddle));
 		
-		this.setVelocityY(-1*Math.abs(this.getVelocityY()));
+		this.setVelocityY(-1*this.getVelocityY());
 		
 	}
 	
